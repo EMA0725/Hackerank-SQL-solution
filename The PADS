@@ -1,0 +1,25 @@
+
+with cte as(
+select concat('There are a total of ',count(OCCUPATION),' ',lower(OCCUPATION) ,'s.') as 'Name' from OCCUPATIONS
+group by OCCUPATION ),cte2 as(
+select concat(NAME,'(', left(OCCUPATION,1) ,')') as 'Name' from OCCUPATIONS
+)
+
+select Name from cte
+union all
+select Name from cte2
+order by Name
+
+
+************************************************************************************
+** Approach 2 **
+with cte2 as(
+select top (select count(*) from OCCUPATIONS) concat('There are a total of ',count(OCCUPATION),' ',lower(OCCUPATION) ,'s.') as 'Name' from OCCUPATIONS
+group by OCCUPATION
+order by Name,count(OCCUPATION) ),
+cte as(
+select top (select count(*) from OCCUPATIONS) concat(NAME,'(', left(OCCUPATION,1) ,')') as 'Name' from OCCUPATIONS order by Name
+)
+select Name from cte
+union all
+select Name from cte2
