@@ -1,0 +1,17 @@
+-- SQL-->Advanced Select-->New Companies
+
+select  cmp.company_code, cmp.founder, count(distinct Lead_Manager.lead_manager_code) 'Lead_Manager',
+count(distinct Senior_Manager.senior_manager_code) 'Senior_Manager',
+count(distinct  Manager.manager_code) 'Manager',
+count(distinct Employee.employee_code) 'Employee'
+from (select distinct  company_code,founder from Company)cmp 
+left join Lead_Manager
+on cmp.company_code = Lead_Manager.company_code
+left join Senior_Manager
+on Lead_Manager.lead_manager_code = Senior_Manager.lead_manager_code 
+left join Manager
+on Senior_Manager.senior_manager_code = Manager.senior_manager_code 
+left join Employee
+on Manager.manager_code = Employee.manager_code
+group by  cmp.company_code, cmp.founder
+order by company_code
